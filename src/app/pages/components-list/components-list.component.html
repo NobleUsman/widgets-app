@@ -1,0 +1,5 @@
+<app-navigation [isLoading]="isDataLoaded"></app-navigation>
+
+<app-card [array]="components" [isWidgetCard]="false"></app-card>
+
+<app-loader *ngIf="!isDataLoaded" [loaderMessage]="loaderMessage"></app-loader>

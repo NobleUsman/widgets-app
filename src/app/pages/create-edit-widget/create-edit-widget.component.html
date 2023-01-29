@@ -1,0 +1,32 @@
+<app-navigation [isLoading]="isDataLoaded"></app-navigation>
+
+<div class="h-[calc(100vh_-_68px)] w-screen flex flex-col justify-center">
+
+  <div class="h-[inherit] flex flex-col justify-center items-center">
+    <button (click)="openDialog('create')" class="text-4xl mb-8 bg-white ring-2 ring-violet-900 hover:bg-violet-900 font-medium tracking-widest text-violet-500 hover:text-white py-2 px-4 rounded-lg">
+      Create a Widget
+    </button>
+  </div>
+
+  <div class="h-[inherit] flex justify-center items-center">
+
+    <form class="flex flex-col gap-6" [formGroup]="chooseWidget">
+
+      <mat-form-field>
+        <mat-label>Choose a widget to edit</mat-label>
+        <mat-select formControlName="widgetID">
+          <mat-option [value]="widget.id" *ngFor="let widget of widgets">{{widget.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button [disabled]="chooseWidget.invalid" (click)="openDialog('edit')" [ngClass]="{'opacity-50': chooseWidget.invalid}" class="text-4xl mb-8 bg-white ring-2 ring-violet-900 hover:bg-violet-900 font-medium tracking-widest text-violet-500 hover:text-white py-2 px-4 rounded-lg">
+        Edit a Widget
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<app-loader *ngIf="!isDataLoaded" [loaderMessage]="loaderMessage"></app-loader>

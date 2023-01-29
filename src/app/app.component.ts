@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { ComponentModel } from './models/component-model';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'widgets-app-fe';
+export class AppComponent implements OnInit {
+  components: ComponentModel[];
+
+  constructor( ) { }
+
+  ngOnInit() { }
 }

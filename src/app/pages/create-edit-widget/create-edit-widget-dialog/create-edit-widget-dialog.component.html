@@ -1,0 +1,153 @@
+<div class="h-full flex flex-col gap-4">
+
+  <div class="p-6 flex justify-center bg-violet-500 text-white font-semibold tracking-widest">
+    {{(formType === 'create') ? 'CREATE' : 'EDIT'}} WIDGET
+  </div>
+  
+  <div class="p-4 flex-1 overflow-y-scroll">
+
+    <button (click)="formVal()">form value</button>
+
+    <div class="flex flex-col items-center gap-4 justify-center pb-6 mb-6 border-b-2 border-b-violet-500">
+
+      <div class="flex justify-center mb-4">
+        <div class="p-4 ring-1 ring-violet-500 rounded-xl italic">
+          Total API Requests Count is {{apiCount}}
+        </div>
+      </div>
+      
+      <mat-form-field *ngIf="formType === 'edit'" class="w-2/5 p-4 ring-2 ring-violet-500 rounded-xl">
+        <mat-label>Choose a different widget to edit</mat-label>
+        <mat-select [(ngModel)]="widgetID" (selectionChange)="setEditFormData($event.value)">
+          <mat-option [value]="widget.id" *ngFor="let widget of widgets">{{widget.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <form [formGroup]="widgetForm" class="flex flex-col gap-6">
+
+      <mat-form-field class="w-full">
+        <mat-label>Widget Name</mat-label>
+        <input matInput formControlName="name" placeholder="Widget Name goes here ...">
+
+        <mat-error *ngIf="widgetForm.controls['name'].errors?.['required']">
+          Please add a Widget Name
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Widget Description</mat-label>
+        <textarea matInput formControlName="description" rows="2" placeholder="Widget Desc goes here ..."></textarea>
+
+        <mat-error *ngIf="widgetForm.controls['description'].errors?.['required']">
+          Please add a Widget Description
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Count</mat-label>
+        <input matInput formControlName="count" type="number">
+
+        <mat-error *ngIf="widgetForm.controls['count'].errors?.['required']">
+          Please add a Count Value
+        </mat-error>
+        <mat-error *ngIf="widgetForm.controls['count'].errors?.['min']">
+          Please set count greater than or equal to 1
+        </mat-error>
+      </mat-form-field>
+
+      <!-- ! components section -->
+      <div formArrayName="components">
+
+        <div class="flex justify-center mb-6">
+          <div class="bg-violet-500 text-white italic text-xl p-3 rounded-xl w-fit">
+            Components associated with this widget
+          </div>
+        </div>
+
+        <div class="mb-4 flex flex-col gap-4">
+
+          <!-- ! single component group -->
+          <div *ngFor="let component of components.controls;let i= index" [formGroupName]="i" class="p-4 ring-2 rounded-xl ring-violet-500 flex flex-col gap-4">
+            
+            <mat-form-field class="w-full">
+              <mat-label>Component Name</mat-label>
+              <input matInput formControlName="name" placeholder="Component Name goes here ...">
+
+              <mat-error *ngIf="component.get('name')?.errors?.['required']">
+                Please add a Component Name
+              </mat-error>
+            </mat-form-field>
+      
+            <mat-form-field class="w-full">
+              <mat-label>Component Description</mat-label>
+              <textarea matInput formControlName="description" rows="2" placeholder="Component Desc goes here ..."></textarea>
+      
+              <mat-error *ngIf="component.get('description')?.errors?.['required']">
+                Please add a Component Description
+              </mat-error>
+            </mat-form-field>
+
+            <label>
+              <input type="checkbox" formControlName="optional" /> Optional
+            </label>
+
+            <!-- ! remove component button -->
+            <div class="flex justify-end" *ngIf="componentCount > 1">
+              <button (click)="removeComponent(i)" class="bg-white ring-1 ring-red-600 hover:bg-red-600 font-semibold tracking-widest text-red-600 hover:text-white py-2 px-4 rounded-lg">
+                REMOVE COMPONENT
+              </button>
+            </div>
+          
+          </div>
+
+        </div>
+
+        <!-- ! add component button -->
+        <!-- <div class="flex justify-end">
+          <button (click)="addComponent()" class="bg-white ring-1 ring-violet-900 hover:bg-violet-900 font-semibold tracking-widest text-violet-500 hover:text-white py-2 px-4 rounded-lg">
+            ADD COMPONENT
+          </button>
+        </div> -->
+
+        <!-- ! add component button alongwith add existing component selection -->
+        <div class="flex justify-between">
+          <div>
+            <mat-form-field *ngIf="formType === 'edit'" class="text-sm p-2 ring-1 ring-violet-500 rounded-xl">
+              <mat-label>Choose an existing component to add</mat-label>
+              <mat-select (selectionChange)="addExistingComponent($event.value)">
+                <mat-option [value]="component.id" *ngFor="let component of componentsList">{{component.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <button (click)="addComponent()" class="bg-white ring-1 ring-violet-900 hover:bg-violet-900 font-semibold tracking-widest text-violet-500 hover:text-white py-2 px-4 rounded-lg">
+            ADD COMPONENT
+          </button>
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="p-4 flex justify-end bg-violet-500">
+
+    <div class="flex gap-4">
+      <button (click)="onCloseDialog('close')" class="bg-white hover:bg-violet-900 font-semibold tracking-widest text-violet-500 hover:text-white py-2 px-4 rounded-lg">
+        CANCEL
+      </button>
+      <button (click)="onCloseDialog('submit')" [disabled]="widgetForm.invalid" cdkFocusInitial [ngClass]="{'opacity-50': widgetForm.invalid}" class="bg-white hover:bg-violet-900 font-semibold tracking-widest text-violet-500 hover:text-white py-2 px-4 rounded-lg">
+        {{(formType === 'create') ? 'CREATE' : 'UPDATE'}}
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<app-loader *ngIf="!isDataLoaded" [loaderMessage]="loaderMessage"></app-loader>
+
+<!-- <app-loader *ngIf="true" [loaderMessage]="loaderMessage"></app-loader> -->

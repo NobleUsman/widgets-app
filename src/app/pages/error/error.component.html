@@ -1,0 +1,23 @@
+<div class="w-screen h-screen bg-violet-300 flex flex-col justify-center items-center">
+  
+  <button routerLink="/widgets-list" routerLinkActive="bg-violet-900 text-white" class="bg-white hover:bg-violet-900 font-semibold tracking-widest text-violet-500 hover:text-white py-2 px-4 rounded-lg">
+    Go Back Home !
+  </button>
+
+  <div class="text-6xl tracking-widest font-medium pb-12 my-12 border-b-2 border-white">
+    Oops!
+  </div>
+  
+  <div class="tracking-wider font-medium pb-2">
+    {{errorMessage.status}}
+  </div>
+  
+  <div class="text-4xl">
+    {{errorMessage.statusText}}
+  </div>
+  
+  <div class="mt-10">
+    {{errorMessage.error.message ? errorMessage.error.message : errorMessage.message}}
+  </div>
+
+</div>
