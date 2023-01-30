@@ -100,6 +100,7 @@ export class CreateEditWidgetComponent implements OnInit {
   async updateWidgetAndComponentLists() {
     this.loaderMessage = LoaderMessage.fetchWidgets;
     await this.apiService.getWidgetList();
+    this.widgets = this.apiService.widgets;
 
     this.loaderMessage = LoaderMessage.fetchComponents;
     await this.apiService.getComponentList();

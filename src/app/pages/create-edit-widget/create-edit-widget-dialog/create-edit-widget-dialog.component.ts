@@ -141,10 +141,10 @@ export class CreateEditWidgetDialogComponent implements OnInit {
     this.dialogRef.close(dialogResult);
   }
 
-  formVal() {
-    console.log('form obj ===> ', this.widgetForm)
-    console.log('components array ===> ', this.components)
-    console.log('value ===> ', this.widgetForm.value)
-  }
+  // formVal() {
+  //   console.log('form obj ===> ', this.widgetForm)
+  //   console.log('components array ===> ', this.components)
+  //   console.log('value ===> ', this.widgetForm.value)
+  // }
 
 }
