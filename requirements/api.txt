@@ -1,0 +1,236 @@
+Widget API
+
+Request and Response Objects
+
+Widget: 
+{
+  id            string                required for PUTs
+  name          string                required
+  description   string                required
+  components    array of Component    optional
+  count         number                required             
+}
+
+Component:
+{
+  id            string      required for existing components
+  name          string      required
+  description   string      required
+  optional      boolean     required
+}
+
+Endpoints
+
+  https://magni-careers.azurewebsites.net/api/widgets
+
+    GET Returns array of Widgets (max of 10, sorted by name) 
+
+    POST Returns Widget
+      body: Widget
+        if an existing component is included, then it must have it's id property set
+
+  https://magni-careers.azurewebsites.net/api/widgets/<widget id>
+
+    GET Returns Widget
+
+    PUT Returns Widget
+      body: Widget
+        if an existing component is included, then it must have it's id property set
+        if an existing component has any of it's properties modified (name, description, optional),
+          then the component will be updated
+        if a component that is currently part of the widget is exclude from the component array,
+          then it will be removed from the widget
+        if an existing component (with id) is included in the component array,
+          then it will be added to the widget
+        if a new component (with no id) is included in the component array,
+          then it will be added to the widget
+
+    DELETE Returns nothing
+
+  https://magni-careers.azurewebsites.net/api/components
+
+    GET Returns array of Components (max of 30, sorted by name)
+
+Examples:
+
+  Create a Widget:
+    https://magni-careers.azurewebsites.net/api/widgets
+
+    method: POST
+
+    body: 
+      {
+        "name": "Widget 1",
+        "description": "Description of Widget 1",
+        "count": 10,
+        "components": [
+          {
+            "name": "Component 1",
+            "description": "Description of Component 1",
+            "optional": true
+          },
+          {
+            "name": "Component 2",
+            "description": "Description of Component 2",
+            "optional": true
+          }
+        ]
+      }
+
+    return:
+      {
+        "id": "FCB9E01D-6C71-463A-8D1E-6E5329EE0D6A",
+        "name": "Widget 1",
+        "description": "Description of Widget 1",
+        "count": 10,
+        "components": [
+          {
+            "id": "7E584887-55D7-4975-A6E2-8FADF157711A",
+            "name": "Component 1",
+            "description": "Description of Component 1",
+            "optional": true
+          },
+          {
+            "id": "3F940B41-6953-490F-A95D-CD98ABDD45FE",
+            "name": "Component 2",
+            "description": "Description of Component 2",
+            "optional": true
+          }
+        ]
+      }
+  
+  Update a Widget 
+    https://magni-careers.azurewebsites.net/api/widgets/FCB9E01D-6C71-463A-8D1E-6E5329EE0D6A
+
+      method: PUT
+
+      notes: In the Widget below, please notice that: 
+        - component 1 has its id and is remaining part of the widget
+        - component 0 has its id and is an existing component that is being added to the widget
+        - component 3 which has no id yet is a new component that is being added to the widget
+        - component 2 which has been removed from the array of components will be removed from the widget
+
+      body:
+        {
+          "id": "FCB9E01D-6C71-463A-8D1E-6E5329EE0D6A",
+          "name": "Widget 1",
+          "description": "Description of Widget 1 updated",
+          "count": 10,
+          "components": [
+            {
+              "id": "7E584887-55D7-4975-A6E2-8FADF157711A",            
+              "name": "Component 1",
+              "description": "Description of Component 1 updated",
+              "optional": true
+            },
+            {
+              "id": "3F080A41-6953-502F-A86D-EF98ABDD72DA",
+              "name": "Component 0",
+              "description": "Description of Component 0",
+              "optional": true
+            },
+            {
+              "name": "Component 3",
+              "description": "Description of Component 3",
+              "optional": true
+            }
+          ]
+        }
+
+      return:
+        {
+          "id": "FCB9E01D-6C71-463A-8D1E-6E5329EE0D6A",
+          "name": "Widget 1",
+          "description": "Description of Widget 1 updated",
+          "count": 10,
+          "components": [
+            {
+              "id": "7E584887-55D7-4975-A6E2-8FADF157711A",            
+              "name": "Component 1",
+              "description": "Description of Component 1 updated",
+              "optional": true
+            },
+            {
+              "id": "3F080A41-6953-502F-A86D-EF98ABDD72DA",
+              "name": "Component 0",
+              "description": "Description of Component 0",
+              "optional": true
+            },
+            {
+              "id": "817C880E-EBA2-4642-A436-945D19879BE1"
+              "name": "Component 3",
+              "description": "Description of Component 3",
+              "optional": true
+            }
+          ]
+        }
+  
+  Get all Widgets (max of ten)
+    https://magni-careers.azurewebsites.net/api/widgets
+
+    method: GET
+
+    return:
+      [
+        {
+          "id": "FCB9E01D-6C71-463A-8D1E-6E5329EE0D6A",
+          "name": "Widget 1",
+          "description": "Description of Widget 1"
+        },
+        {
+          "id": "817C880E-EBA2-4642-A436-945D19879BE1",
+          "name": "Widget 2",
+          "description": "Description of Widget 2"
+        },
+        {
+          "id": "C66476F4-D694-41B0-AB1F-10B1BD6982E2",
+          "name": "Widget 3",
+          "description": "Description of Widget 3"
+        }
+      ]
+
+  Get a Widget
+    https://magni-careers.azurewebsites.net/api/widgets/FCB9E01D-6C71-463A-8D1E-6E5329EE0D6A
+
+    method: GET
+
+    return:
+      {
+        "id": "FCB9E01D-6C71-463A-8D1E-6E5329EE0D6A",
+        "name": "Widget 1",
+        "description": "Description of Widget 1",
+        "count": 10,
+        "components": [
+          {
+            "id": "7E584887-55D7-4975-A6E2-8FADF157711A",
+            "name": "Component 1",
+            "description": "Description of Component 1",
+            "optional": true
+          },
+          {
+            "id": "3F940B41-6953-490F-A95D-CD98ABDD45FE",
+            "name": "Component 2",
+            "description": "Description of Component 2",
+            "optional": true
+          }
+        ]
+      }
+
+  Get all components (max of 30)
+    https://magni-careers.azurewebsites.net/api/components
+
+    method: GET
+
+    return:
+      [
+        {
+          "id": "7E584887-55D7-4975-A6E2-8FADF157711A",
+          "name": "Component 1",
+          "description": "Description of Component 1"
+        },
+        {
+          "id": "3F940B41-6953-490F-A95D-CD98ABDD45FE",
+          "name": "Component 2",
+          "description": "Description of Component 2"
+        }
+      ]

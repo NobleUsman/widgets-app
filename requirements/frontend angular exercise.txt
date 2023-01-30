@@ -1,0 +1,44 @@
+Frontend Angular Exercise
+  
+  Objective:
+    Create an angular project that will interact with an API.
+    The project will handle all the CRUD functionality for a Widget.
+
+  Tasks:
+    1. Create the angular project.
+    2. Create the following pages:
+      a. Widgets List - Page to show the list of widgets (limit to name, description headers and 'View' button to show the detail page of widget)
+      b. Widgets Detail - Page to show the widgets detail along with all the components list associated with the widget.
+      
+      c. Creating and Editing a widget
+        - must be able to add new component (both create & edit. In edit, send "id" null)
+        - must be able to add existing component (edit)
+        - must be able to update existing component (edit)
+        - must be able to remove a component (edit, but keep atleast 1 component associated or else error)
+      
+      d. Components List - Review list of components
+      e. Display errors from api.
+    3. Add ability to delete a widget.
+    
+    4. Add a request count (starting at 0) for all requests to the api calls. Display the total request count in the form.
+    
+    5. Redirect all errors to the separate error page where you need to show the error message.
+
+
+------
+- Creating a single widget with n components - POST() widget
+- component is updatable from the widget itself - PUT() widget
+
+
+
+CREATION WIDGET & COMPONENT
+- when creating a widget. make sure that "components" are also new, you cannot add existing components while adding
+- if 2 components are of same name, each of them will be created wth separate ID
+- but if any component name matches with already existing component, then widget cannot be created and error will be shown
+
+- make component required, because on creating a widget without a component, will create the widget but that wont show any widget details
+
+- there SHOULD BE ALWAYS a component associated with it
+
+-------
+handle empty data states - ??
